@@ -107,6 +107,7 @@ public class RentableServiceImpl implements IRentableService {
         rentableDTO.setAddress(rentable.getAddress());
         rentableDTO.setPostalCode(rentable.getPostalCode());
         rentableDTO.setPricePerNightUSD(rentable.getPricePerNightUSD());
+        rentableDTO.setAssociatedImgsUrl(rentable.getAssociatedImgsUrl());
         rentableDTO.setRentableTypeId(rentable.getRentableType().getId());
 
         return rentableDTO;
@@ -120,6 +121,7 @@ public class RentableServiceImpl implements IRentableService {
             rentable.setAddress(rentableDTO.getAddress());
             rentable.setPostalCode(rentableDTO.getPostalCode());
             rentable.setPricePerNightUSD(rentableDTO.getPricePerNightUSD());
+            rentable.setAssociatedImgsUrl(rentableDTO.getAssociatedImgsUrl());
             rentable.setRentableType(rentableTypeAssociated.get());
         } else throw new ResourceNotFoundException("Rentable Service: Rentable type with ID=" + rentableDTO.getRentableTypeId() + " not found");
 

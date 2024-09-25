@@ -1,8 +1,7 @@
 package com.digitalHouse.FireBrB.auth;
 
 import com.digitalHouse.FireBrB.enums.Role;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthenticationControllerTest {
 
 
@@ -30,11 +30,8 @@ class AuthenticationControllerTest {
     private final static String FIRST_NAME = "Fisi";
     private final static String SURNAME = "Rodriguez";
 
-    public void loadData() {
-        authService.register(new RegisterRequest(FIRST_NAME, SURNAME, EMAIL, PASSWORD));
-    }
-
     @Test
+    @Order(1)
     void registerRequest() throws Exception {
         String userRegistered = "{" +
                 "\"email\": \""+EMAIL+"\"," +
@@ -51,8 +48,8 @@ class AuthenticationControllerTest {
     }
 
     @Test
+    @Order(2)
     void loginRequest() throws Exception {
-        loadData();
         String userData = "{" +
                 "\"email\": \""+EMAIL+"\"," +
                 "\"password\": \""+PASSWORD+"\"" +

@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,14 +20,25 @@ class RentableServiceImplTest {
     @Autowired
     private RentableTypeServiceImpl typeService;
 
+    private static final String IMAGE_1 = "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    private static final String IMAGE_2 = "https://images.unsplash.com/photo-1444201983204-c43cbd584d93?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    private static final String IMAGE_3 = "https://plus.unsplash.com/premium_photo-1687960116497-0dc41e1808a2?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    private static final String IMAGE_4 = "https://images.unsplash.com/photo-1529290130-4ca3753253ae?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
     public Long loadData() throws ResourceNotFoundException {
         RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
+        List<String> associatedImgs = new ArrayList<>();
+        associatedImgs.add(IMAGE_1);
+        associatedImgs.add(IMAGE_2);
+
+
         RentableDTO input = new RentableDTO("Montevideo 1423",
                 "SK1003",
                 12.41,
-                rentableTypeResponse.getId());
+                rentableTypeResponse.getId(),
+                associatedImgs);
         RentableDTO response = rentableService.save(input);
 
         return response.getId();
@@ -39,7 +49,15 @@ class RentableServiceImplTest {
         RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
-        RentableDTO input = new RentableDTO("Urquiza 2368", "JS9531", 9.36, rentableTypeResponse.getId());
+        List<String> associatedImgs = new ArrayList<>();
+        associatedImgs.add(IMAGE_1);
+        associatedImgs.add(IMAGE_2);
+
+        RentableDTO input = new RentableDTO("Urquiza 2368",
+                "JS9531",
+                9.36,
+                rentableTypeResponse.getId(),
+                associatedImgs);
         RentableDTO response = rentableService.save(input);
 
         Optional<RentableDTO> actualRentable = rentableService.findById(response.getId());
@@ -66,7 +84,13 @@ class RentableServiceImplTest {
     @Test
     public void update() throws ResourceNotFoundException {
         Long id = loadData();
-        RentableDTO input = new RentableDTO(id, "Crespo 2547", "KG3284", 10.91, 1L);
+
+
+        List<String> associatedImgs = new ArrayList<>();
+        associatedImgs.add(IMAGE_3);
+        associatedImgs.add(IMAGE_4);
+
+        RentableDTO input = new RentableDTO(id, "Crespo 2547", "KG3284", 10.91, 1L, associatedImgs);
         RentableDTO response = rentableService.update(input);
 
         assertThat(input)

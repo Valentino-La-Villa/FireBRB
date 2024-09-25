@@ -2,7 +2,8 @@ package com.digitalHouse.FireBrB.controller;
 
 import com.digitalHouse.FireBrB.auth.AuthenticationService;
 import com.digitalHouse.FireBrB.auth.RegisterRequest;
-import org.junit.jupiter.api.Test;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AdminControllerTest {
 
     @Autowired
@@ -24,7 +26,7 @@ class AdminControllerTest {
     private AuthenticationService authService;
 
     private final static String ENDPOINT = "/admin";
-    private final static String EMAIL = "ferensibiditoilet@gmail.com";
+    private final static String EMAIL = "juancarlitos200@gmail.com";
     private final static String PASSWORD = "1234";
     private final static String FIRST_NAME = "Fisi";
     private final static String SURNAME = "Rodriguez";
@@ -34,6 +36,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @Order(1)
     void assignAdminRequest() throws Exception {
         loadData();
         String userData = "{\"userEmail\": \""+EMAIL+"\"}";
@@ -50,8 +53,8 @@ class AdminControllerTest {
     }
 
     @Test
+    @Order(2)
     void revokeAdminRequest() throws Exception {
-        loadData();
         String userData = "{\"userEmail\": \""+EMAIL+"\"}";
 
         mockMvc.perform(put(ENDPOINT + "/revokeAdminPrivileges")

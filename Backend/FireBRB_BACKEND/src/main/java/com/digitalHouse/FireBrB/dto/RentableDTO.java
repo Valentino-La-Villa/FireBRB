@@ -3,6 +3,7 @@ package com.digitalHouse.FireBrB.dto;
 import com.digitalHouse.FireBrB.model.RentableType;
 import com.digitalHouse.FireBrB.model.Reservation;
 
+import java.util.List;
 import java.util.Set;
 
 public class RentableDTO {
@@ -11,20 +12,23 @@ public class RentableDTO {
     private String postalCode;
     private Double pricePerNightUSD;
     private Long rentableTypeId;
+    private List<String> associatedImgsUrl;
 
-    public RentableDTO(Long id, String address, String postalCode, Double pricePerNightUSD, Long rentableTypeId) {
+    public RentableDTO(Long id, String address, String postalCode, Double pricePerNightUSD, Long rentableTypeId, List<String> associatedImgsUrl) {
         this.id = id;
         this.address = address;
         this.postalCode = postalCode;
         this.pricePerNightUSD = pricePerNightUSD;
         this.rentableTypeId = rentableTypeId;
+        this.associatedImgsUrl = associatedImgsUrl;
     }
 
-    public RentableDTO(String address, String postalCode, Double pricePerNightUSD, Long rentableTypeId) {
+    public RentableDTO(String address, String postalCode, Double pricePerNightUSD, Long rentableTypeId, List<String> associatedImgsUrl) {
         this.address = address;
         this.postalCode = postalCode;
         this.pricePerNightUSD = pricePerNightUSD;
         this.rentableTypeId = rentableTypeId;
+        this.associatedImgsUrl = associatedImgsUrl;
     }
 
     public RentableDTO() {
@@ -68,5 +72,13 @@ public class RentableDTO {
 
     public void setRentableTypeId(Long rentableTypeId) {
         this.rentableTypeId = rentableTypeId;
+    }
+
+    public List<String> getAssociatedImgsUrl() {
+        return associatedImgsUrl;
+    }
+
+    public void setAssociatedImgsUrl(List<String> associatedImgsUrl) {
+        this.associatedImgsUrl = associatedImgsUrl;
     }
 }

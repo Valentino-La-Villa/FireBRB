@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ class ReservationServiceImplTest {
         RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Cabin");
         RentableTypeDTO rentableTypeResponse = rentableTypeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Viamonte 4150", "JK2004", 6.43, rentableTypeResponse.getId());
+        RentableDTO rentableDTO = new RentableDTO("Viamonte 4150", "JK2004", 6.43, rentableTypeResponse.getId(), new ArrayList<>());
         var user = User.builder()
                 .firstName("Juan")
                 .surname("Pérez")
@@ -58,7 +60,7 @@ class ReservationServiceImplTest {
         RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
         RentableTypeDTO rentableTypeResponse = rentableTypeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Sarmiento 345", "MFD3004", 23.72, rentableTypeResponse.getId());
+        RentableDTO rentableDTO = new RentableDTO("Sarmiento 345", "MFD3004", 23.72, rentableTypeResponse.getId(), new ArrayList<>());
         var user = User.builder()
                 .firstName("Fisi")
                 .surname("Rodriguez")

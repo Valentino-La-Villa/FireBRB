@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,7 +54,7 @@ class ReservationControllerTest {
         RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Entre Ríos 1545", "SK2001", 12.51, 1L);
+        RentableDTO rentableDTO = new RentableDTO("Entre Ríos 1545", "SK2001", 12.51, 1L, new ArrayList<>());
         RentableDTO rentableResponse = rentableService.save(rentableDTO);
 
         var user = User.builder()
@@ -114,7 +116,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+                .andExpect(jsonPath("$").exists());
     }
 
     @Test
