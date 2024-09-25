@@ -1,0 +1,90 @@
+package com.digitalHouse.FireBrB.service.impl;
+
+import com.digitalHouse.FireBrB.dto.RentableDTO;
+import com.digitalHouse.FireBrB.dto.RentableTypeDTO;
+import com.digitalHouse.FireBrB.exception.ResourceNotFoundException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class RentableServiceImplTest {
+
+    @Autowired
+    private RentableServiceImpl rentableService;
+    @Autowired
+    private RentableTypeServiceImpl typeService;
+
+    public Long loadData() throws ResourceNotFoundException {
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
+
+        RentableDTO input = new RentableDTO("Montevideo 1423",
+                "SK1003",
+                12.41,
+                rentableTypeResponse.getId());
+        RentableDTO response = rentableService.save(input);
+
+        return response.getId();
+    }
+
+    @Test
+    public void save() throws ResourceNotFoundException {
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
+
+        RentableDTO input = new RentableDTO("Urquiza 2368", "JS9531", 9.36, rentableTypeResponse.getId());
+        RentableDTO response = rentableService.save(input);
+
+        Optional<RentableDTO> actualRentable = rentableService.findById(response.getId());
+
+        assertThat(actualRentable.get())
+                .usingRecursiveComparison()
+                .isEqualTo(response);
+    }
+
+    @Test
+    public void findById() throws ResourceNotFoundException {
+        Long id = loadData();
+        Optional<RentableDTO> actualRentable = rentableService.findById(id);
+        assertNotNull(actualRentable.get());
+    }
+
+    @Test
+    public void findAll() throws ResourceNotFoundException {
+        loadData();
+        List<RentableDTO> response = rentableService.findAll();
+        assertFalse(response.isEmpty());
+    }
+
+    @Test
+    public void update() throws ResourceNotFoundException {
+        Long id = loadData();
+        RentableDTO input = new RentableDTO(id, "Crespo 2547", "KG3284", 10.91, 1L);
+        RentableDTO response = rentableService.update(input);
+
+        assertThat(input)
+                .usingRecursiveComparison()
+                .isEqualTo(response);
+    }
+
+    @Test
+    public void delete() throws ResourceNotFoundException {
+        Long id = loadData();
+        rentableService.delete(id);
+        Optional<RentableDTO> actual;
+        try {
+            actual = rentableService.findById(id);
+        } catch(ResourceNotFoundException e) {
+            assertTrue(true); // I don't know as of right now if there is a more elegant way to make a JUnit check for errorType, given the fact that if I straight up check for actual.isPresent() the test will not pass, because it immediately throws ResourceNotFoundException
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+}
