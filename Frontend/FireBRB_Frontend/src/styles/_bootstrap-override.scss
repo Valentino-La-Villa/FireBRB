@@ -1,0 +1,23 @@
+$primary: #abc5da;
+$secondary: #eaeeed;
+$success: #508078;
+$success: #E9464A;
+$dark: #1d1f1e;
+$grey: #8d8d8d;
+
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "dark": $dark,
+    "grey": $grey
+);
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+button:hover {
+    border-color: $primary;
+}
+
+body {
+    background-color: $secondary;
+}

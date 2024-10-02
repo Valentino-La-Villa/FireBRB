@@ -2,7 +2,10 @@ package com.digitalHouse.FireBrB.service.impl;
 
 import com.digitalHouse.FireBrB.dto.RentableTypeDTO;
 import com.digitalHouse.FireBrB.exception.ResourceNotFoundException;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,20 +16,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RentableTypeServiceImplTest {
 
     @Autowired
     private RentableTypeServiceImpl rentableTypeService;
 
     public Long loadData() {
-        RentableTypeDTO initialData = new RentableTypeDTO("Cabin");
+        RentableTypeDTO initialData = new RentableTypeDTO("Cabin", "");
         RentableTypeDTO response = rentableTypeService.save(initialData);
         return response.getId();
     }
 
     @Test
+    @Order(1)
     public void save() throws ResourceNotFoundException {
-        RentableTypeDTO initialData = new RentableTypeDTO("Appartment");
+        RentableTypeDTO initialData = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO response = rentableTypeService.save(initialData);
 
         Optional<RentableTypeDTO> actualRentableType = rentableTypeService.findById(response.getId());
@@ -37,23 +42,23 @@ class RentableTypeServiceImplTest {
     }
 
     @Test
+    @Order(2)
     public void findById() throws ResourceNotFoundException {
-        Long id = loadData();
-        Optional<RentableTypeDTO> actualRentableType = rentableTypeService.findById(id);
+        Optional<RentableTypeDTO> actualRentableType = rentableTypeService.findById(1L);
         assertNotNull(actualRentableType.get());
     }
 
     @Test
+    @Order(3)
     public void findAll() {
-        loadData();
         List<RentableTypeDTO> response = rentableTypeService.findAll();
         assertFalse(response.isEmpty());
     }
 
     @Test
+    @Order(4)
     public void update() throws ResourceNotFoundException {
-        Long id = loadData();
-        RentableTypeDTO input = new RentableTypeDTO(id, "Penthouse");
+        RentableTypeDTO input = new RentableTypeDTO(1L, "Penthouse", "");
         RentableTypeDTO response = rentableTypeService.update(input);
 
         assertThat(input)
@@ -62,6 +67,7 @@ class RentableTypeServiceImplTest {
     }
 
     @Test
+    @Order(5)
     public void delete() throws ResourceNotFoundException {
         Long id = loadData();
         rentableTypeService.delete(id);

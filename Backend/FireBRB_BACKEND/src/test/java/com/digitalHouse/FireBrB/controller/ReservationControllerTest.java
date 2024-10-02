@@ -51,10 +51,10 @@ class ReservationControllerTest {
     private final static String CHECK_OUT_UPDATE = "3022-01-01";
 
     public ReservationDTO dataLoad() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Entre Ríos 1545", "SK2001", 12.51, 1L, new ArrayList<>());
+        RentableDTO rentableDTO = new RentableDTO("Casucha", "Entre Ríos 1545", "Morón", "Buenos Aires", "Argentina", 12.51, 4.0, 1L, new ArrayList<>(), "");
         RentableDTO rentableResponse = rentableService.save(rentableDTO);
 
         var user = User.builder()

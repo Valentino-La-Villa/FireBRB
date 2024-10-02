@@ -29,17 +29,17 @@ class RentableTypeControllerTest {
     private MockMvc mockMvc;
 
     private static final String ENDPOINT = "/rentableTypes";
-    private static final String NAME = "Appartment";
+    private static final String NAME = "Hotel";
 
     public Long dataLoad() throws ResourceNotFoundException {
-        RentableTypeDTO input = new RentableTypeDTO(NAME);
+        RentableTypeDTO input = new RentableTypeDTO(NAME, "imagelink");
         RentableTypeDTO response = rentableTypeService.save(input);
 
         return response.getId();
     }
 
     @Test
-    @Order(3)
+    @Order(1)
     public void findByIdRequest() throws Exception {
         Long id = dataLoad();
 
@@ -52,18 +52,22 @@ class RentableTypeControllerTest {
     @Order(2)
     public void saveRequest() throws Exception {
         Long id = dataLoad();
-        String rentableTypePersisted = "{\"name\": \""+NAME+"\"}";
+        String rentableTypePersisted = "{" +
+                "\"associatedImg\": \"imagelink\"," +
+                "\"name\": \""+NAME+"\"" +
+                "}";
 
         mockMvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(rentableTypePersisted)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(NAME));
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.associatedImg").value("imagelink"));
     }
 
     @Test
-    @Order(1)
+    @Order(3)
     public void findAllRequest() throws Exception {
         mockMvc.perform(get(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -77,7 +81,8 @@ class RentableTypeControllerTest {
         Long id = dataLoad();
         String newRentableType = "{" +
                 "\"id\": \"1\"," +
-                "\"name\": \""+NAME+" - edited\"" +
+                "\"name\": \""+NAME+" - edited\"," +
+                "\"associatedImg\": \"imagelink - edited\"" +
                 "}";
 
         mockMvc.perform(put(ENDPOINT)
@@ -85,7 +90,8 @@ class RentableTypeControllerTest {
                         .content(newRentableType)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(NAME + " - edited"));
+                .andExpect(jsonPath("$.name").value(NAME + " - edited"))
+                .andExpect(jsonPath("$.associatedImg").value("imagelink - edited"));
     }
 
     @Test

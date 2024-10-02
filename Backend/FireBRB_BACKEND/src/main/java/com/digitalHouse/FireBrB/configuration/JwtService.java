@@ -1,10 +1,11 @@
 package com.digitalHouse.FireBrB.configuration;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
     private static final String SECRET_KEY = "77b79be8c6163b04451a26641bca4c39bc84c296defde97b24e265b3dc478648\n";
 
@@ -47,6 +50,18 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException exception) {
+            throw new ExpiredJwtException(null, null, "JWT Authentication Token has expired");
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException exception) {
+            logger.error("JWT Token has expired", exception);
+        }
+        return false;
+    }
+
     public Date extractExpiration(String token) {
         return extractSingleClaim(token, Claims::getExpiration);
     }
@@ -63,8 +78,9 @@ public class JwtService {
                 .builder()
                 .setClaims(extractClaims)
                 .setSubject(userDetails.getUsername())
+                .claim("roles", userDetails.getAuthorities())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*70))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

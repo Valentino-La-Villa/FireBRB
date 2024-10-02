@@ -1,0 +1,33 @@
+.offcanvas h2 {
+    font-size: 1.3rem;
+    text-align: end;
+}
+
+.offcanvas p {
+    font-size: 1rem;
+}
+
+a {
+    color: white;
+}
+
+header h3 {
+    color: rgb(163, 163, 163);
+    font-size: 1.3rem;
+    transition: 0.2s
+}
+
+header h3:hover {
+    color: rgb(221, 221, 221);
+}
+
+@media (max-width: 991.98px) {
+    .offcanvas h3 {
+        font-size: 1.8rem;
+        text-align: end;
+    }
+
+    .offcanvas p {
+        font-size: 1.8rem;
+    }
+}

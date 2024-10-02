@@ -35,10 +35,10 @@ class ReservationServiceImplTest {
     private ReservationServiceImpl reservationService;
 
     public Long loadData() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Cabin");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Cabin", "");
         RentableTypeDTO rentableTypeResponse = rentableTypeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Viamonte 4150", "JK2004", 6.43, rentableTypeResponse.getId(), new ArrayList<>());
+        RentableDTO rentableDTO = new RentableDTO("Nono Mingo", "Viamonte 4150", "San Miguel de Tucumán", "Tucumán", "Argentina", 6.43, 2.8, rentableTypeResponse.getId(), new ArrayList<>(), "");
         var user = User.builder()
                 .firstName("Juan")
                 .surname("Pérez")
@@ -57,10 +57,10 @@ class ReservationServiceImplTest {
 
     @Test
     public void save() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO rentableTypeResponse = rentableTypeService.save(rentableTypeDTO);
 
-        RentableDTO rentableDTO = new RentableDTO("Sarmiento 345", "MFD3004", 23.72, rentableTypeResponse.getId(), new ArrayList<>());
+        RentableDTO rentableDTO = new RentableDTO("Lugar", "Sarmiento 345", "Córdoba", "Córdoba", "Argentina", 23.72, 3.7, rentableTypeResponse.getId(), new ArrayList<>(), "");
         var user = User.builder()
                 .firstName("Fisi")
                 .surname("Rodriguez")

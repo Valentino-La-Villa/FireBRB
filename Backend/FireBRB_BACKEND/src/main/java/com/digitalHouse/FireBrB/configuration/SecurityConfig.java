@@ -23,19 +23,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.cors().and().csrf().disable()
                 .headers()
                 .frameOptions().disable()
                 .and()
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(HttpMethod.GET, "**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll() // To be removed on a later version
                                 .requestMatchers("/auth/register").permitAll()
                                 .requestMatchers("/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui.html/**").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .requestMatchers("/admin").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(

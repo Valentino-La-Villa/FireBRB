@@ -1,0 +1,18 @@
+$header-height: 5rem;
+
+header {
+    height: $header-height;
+}
+
+header section {
+    box-sizing: border-box;
+    height: $header-height;
+}
+
+header img {
+    max-height: 100%;
+}
+
+.hello-message {
+    font-style: italic;
+}

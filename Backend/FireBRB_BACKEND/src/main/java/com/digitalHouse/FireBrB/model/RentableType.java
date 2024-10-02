@@ -16,9 +16,10 @@ public class RentableType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String associatedImg;
 
-    public RentableType(String name) {
+    public RentableType(String name, String associatedImg) {
         this.name = name;
+        this.associatedImg = associatedImg;
     }
-
 }

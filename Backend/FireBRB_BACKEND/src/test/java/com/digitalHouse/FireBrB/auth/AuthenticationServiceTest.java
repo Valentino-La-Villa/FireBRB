@@ -3,6 +3,8 @@ package com.digitalHouse.FireBrB.auth;
 import com.digitalHouse.FireBrB.enums.Role;
 import com.digitalHouse.FireBrB.model.User;
 import com.digitalHouse.FireBrB.repository.IUserRepository;
+import com.digitalHouse.FireBrB.request.AssignAdminRequest;
+import com.digitalHouse.FireBrB.request.AuthenticationRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

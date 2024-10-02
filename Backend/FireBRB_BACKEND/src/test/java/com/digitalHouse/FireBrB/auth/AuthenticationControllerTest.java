@@ -44,7 +44,11 @@ class AuthenticationControllerTest {
                     .content(userRegistered)
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty());
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.role").value("USERREGULAR"))
+                .andExpect(jsonPath("$.firstName").value(FIRST_NAME))
+                .andExpect(jsonPath("$.surname").value(SURNAME))
+                .andExpect(jsonPath("$.email").value(EMAIL));
     }
 
     @Test
@@ -60,6 +64,10 @@ class AuthenticationControllerTest {
                     .content(userData)
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty());
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.role").value("USERREGULAR"))
+                .andExpect(jsonPath("$.firstName").value(FIRST_NAME))
+                .andExpect(jsonPath("$.surname").value(SURNAME))
+                .andExpect(jsonPath("$.email").value(EMAIL));
     }
 }

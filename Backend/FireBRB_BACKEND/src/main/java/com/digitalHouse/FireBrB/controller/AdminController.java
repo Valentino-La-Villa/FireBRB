@@ -1,6 +1,6 @@
 package com.digitalHouse.FireBrB.controller;
 
-import com.digitalHouse.FireBrB.auth.AssignAdminRequest;
+import com.digitalHouse.FireBrB.request.AssignAdminRequest;
 import com.digitalHouse.FireBrB.auth.AuthenticationService;
 import com.digitalHouse.FireBrB.model.User;
 import com.digitalHouse.FireBrB.repository.IUserRepository;

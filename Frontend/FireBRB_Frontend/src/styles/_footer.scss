@@ -1,0 +1,19 @@
+$footer-height: 4rem;
+
+footer {
+    font-size: 12px;
+    height: $footer-height;
+}
+
+footer>div>img {
+    height: $footer-height * 0.5;
+}
+
+.social-media-tab img {
+    height: 35px;
+    transition: 0.3s ease;
+}
+
+.social-media-tab img:hover {
+    transform: scale(115%);
+}

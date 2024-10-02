@@ -1,0 +1,59 @@
+$category-height: 300px;
+
+.rentable-type-display {
+    height: $category-height;
+}
+
+.rentable-type-display img {
+    object-fit: cover;
+    height: $category-height * 0.66;
+    width: 100%;
+}
+
+.rentable-type-display>div {
+    transition: 0.5s ease;
+}
+
+.rentable-type-display>div:hover {
+    cursor: pointer;
+    transform: scale(102%);
+}
+
+.recommendation {
+    height: $category-height * 0.8;
+}
+
+.recommendation img {
+    object-fit: cover;
+    height: $category-height* 0.8;
+    width: 100%;
+}
+
+.recommendation p {
+    font-size: 0.8rem;
+}
+
+.recommendation h3 {
+    font-size: 1.4rem;
+}
+
+.text-with-icon img {
+    width: 0.7rem;
+    height: 0.7rem;
+}
+
+.price-tag {
+    color: green;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.price-tag-text {
+    font-size: 0.8rem;
+}
+
+@media (max-width: 1200px) {
+    .recommendation h3 {
+        font-size: 1rem;
+    }
+}

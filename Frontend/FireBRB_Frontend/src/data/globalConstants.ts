@@ -1,0 +1,1 @@
+export const ENDPOINT: String = "https://localhost:8080"

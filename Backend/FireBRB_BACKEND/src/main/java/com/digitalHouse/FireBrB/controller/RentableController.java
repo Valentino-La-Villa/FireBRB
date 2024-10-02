@@ -1,7 +1,9 @@
 package com.digitalHouse.FireBrB.controller;
 
 import com.digitalHouse.FireBrB.dto.RentableDTO;
+import com.digitalHouse.FireBrB.dto.RentableTypeDTO;
 import com.digitalHouse.FireBrB.exception.ResourceNotFoundException;
+import com.digitalHouse.FireBrB.request.FilterRequest;
 import com.digitalHouse.FireBrB.service.IRentableService;
 import com.digitalHouse.FireBrB.service.IRentableTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,16 @@ public class RentableController {
 
 
     @PostMapping
-    public ResponseEntity<RentableDTO> save(@RequestBody RentableDTO rentableDTO) throws ResourceNotFoundException {
-        ResponseEntity<RentableDTO> response;
+    public ResponseEntity<?> save(@RequestBody RentableDTO rentableDTO) throws ResourceNotFoundException {
 
         // Checking if all dependencies exist first
         if (rentableTypeService.findById(rentableDTO.getRentableTypeId()).isPresent()) {
-            response = ResponseEntity.ok(rentableService.save(rentableDTO));
-        } else response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
-        return response;
+            Optional<RentableDTO> optionalRentableDTO = rentableService.findByName(rentableDTO.getName());
+            if (optionalRentableDTO.isPresent()) {
+                return ResponseEntity.badRequest().body("A Rentable with the name '" + rentableDTO.getName() + "' already exists");
+            }
+            else return ResponseEntity.ok(rentableService.save(rentableDTO));
+        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping
@@ -50,6 +53,24 @@ public class RentableController {
         if (rentableDTORequested.isPresent()) {
             return ResponseEntity.ok(rentableDTORequested.get());
         } else return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RentableDTO>> filterSearch(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDirection,
+            @RequestParam(required = false) Boolean random
+    ) {
+
+        FilterRequest filterRequest = new FilterRequest();
+        filterRequest.setLimit(limit != null ? limit: 20);
+        filterRequest.setSortBy(sortBy);
+        filterRequest.setSortDirection(sortDirection);
+        filterRequest.setRandom(random != null && random);
+
+        List<RentableDTO> rentablesToReturn = rentableService.filterSearch(filterRequest);
+        return ResponseEntity.ok(rentablesToReturn);
     }
 
     @PutMapping

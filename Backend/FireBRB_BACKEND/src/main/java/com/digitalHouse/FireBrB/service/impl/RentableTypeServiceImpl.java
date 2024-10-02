@@ -77,6 +77,24 @@ public class RentableTypeServiceImpl implements IRentableTypeService {
     }
 
     @Override
+    public Optional<RentableTypeDTO> findByName(String name) {
+
+        Optional<RentableType> optionalRentableTypeRequested = rentableTypeRepository.findByName(name);
+        Optional<RentableTypeDTO> responseDTO = null;
+
+        if (optionalRentableTypeRequested.isPresent()) {
+            // Mapping the rentableType found in the database back to the DTO
+            RentableType rentableTypeRequested = optionalRentableTypeRequested.get();
+
+            RentableTypeDTO rentableTypeDTORequested = mapEntityToDTO(rentableTypeRequested);
+
+            responseDTO = Optional.of(rentableTypeDTORequested);
+        }
+        else responseDTO = Optional.empty();
+        return responseDTO;
+    }
+
+    @Override
     public RentableTypeDTO update(RentableTypeDTO rentableTypeDTO) throws ResourceNotFoundException {
         Optional<RentableType> optionalRentableTypeRequested = rentableTypeRepository.findById(rentableTypeDTO.getId());
 
@@ -114,6 +132,7 @@ public class RentableTypeServiceImpl implements IRentableTypeService {
 
         rentableTypeDTO.setId(rentableType.getId());
         rentableTypeDTO.setName(rentableType.getName());
+        rentableTypeDTO.setAssociatedImg(rentableType.getAssociatedImg());
         return rentableTypeDTO;
     }
 
@@ -123,6 +142,7 @@ public class RentableTypeServiceImpl implements IRentableTypeService {
 
         rentableType.setId(rentableTypeDTO.getId());
         rentableType.setName(rentableTypeDTO.getName());
+        rentableType.setAssociatedImg(rentableTypeDTO.getAssociatedImg());
         return rentableType;
     }
 }

@@ -1,4 +1,4 @@
-package com.digitalHouse.FireBrB.auth;
+package com.digitalHouse.FireBrB.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

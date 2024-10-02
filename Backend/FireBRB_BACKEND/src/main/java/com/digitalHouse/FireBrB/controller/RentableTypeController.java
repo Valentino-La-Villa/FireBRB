@@ -1,5 +1,6 @@
 package com.digitalHouse.FireBrB.controller;
 
+import com.digitalHouse.FireBrB.dto.RentableDTO;
 import com.digitalHouse.FireBrB.dto.RentableTypeDTO;
 import com.digitalHouse.FireBrB.exception.ResourceNotFoundException;
 import com.digitalHouse.FireBrB.service.IRentableTypeService;
@@ -22,7 +23,11 @@ public class RentableTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<RentableTypeDTO> save(@RequestBody RentableTypeDTO rentableTypeDTO) throws ResourceNotFoundException {
+    public ResponseEntity<?> save(@RequestBody RentableTypeDTO rentableTypeDTO) throws ResourceNotFoundException {
+        Optional<RentableTypeDTO> optionalRentableTypeDTO = rentableTypeService.findByName(rentableTypeDTO.getName());
+        if (optionalRentableTypeDTO.isPresent()) {
+            return ResponseEntity.badRequest().body("A Rentable Type with the name '" + rentableTypeDTO.getName() + "' already exists");
+        }
         return ResponseEntity.ok(rentableTypeService.save(rentableTypeDTO));
     }
 

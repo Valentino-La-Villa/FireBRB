@@ -1,33 +1,106 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import './styles/output.css'
+import Footer from './components/footer/Footer'
+import Header from './components/header/Header'
+import { Route, Routes } from 'react-router-dom'
+import Home from './components/homepage/Home'
+import Register from './components/auth/register/Register'
+import Login from './components/auth/login/Login'
+import MyProfile from './components/myProfile/MyProfile'
+import IndividualRentablePage from './components/rentables/IndividualRentablePage/IndividualRentablePage'
+import RentableCatalog from './components/rentables/rentableCatalog/RentableCatalog'
+import NotFound from './components/misc/NotFound'
+import Checkout from './components/checkout/Checkout'
+import Admin from './components/auth/admin/Admin'
+import { useAuthRouterValidations } from './components/hooks/useAuthRouterValidations'
+import useAxiosInterceptor from './components/hooks/useAxiosInterceptor'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const { LoginValidation, AdminValidation, NotLoggedInValidation } = useAuthRouterValidations()
+
+  useAxiosInterceptor()
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Header />
+
+      <div className='body-wrapper bg-secondary'>
+
+        <Routes>
+
+          <Route path='/'
+            element={
+              <Home />
+            }
+          />
+
+          <Route path='/register'
+            element={
+              <NotLoggedInValidation>
+                <Register />
+              </NotLoggedInValidation>
+            }
+          />
+
+          <Route path='/login'
+            element={
+              <NotLoggedInValidation>
+                <Login />
+              </NotLoggedInValidation>
+            }
+          />
+
+          <Route path='/myProfile'
+            element={
+              <LoginValidation>
+                <MyProfile />
+              </LoginValidation>
+            }
+          />
+
+          <Route path='/rentables/'
+            element={
+              <LoginValidation>
+                <RentableCatalog />
+              </LoginValidation>
+            }
+          />
+
+          <Route path='/rentables/:rentableID'
+            element={
+              <LoginValidation>
+                <IndividualRentablePage />
+              </LoginValidation>
+            }
+          />
+
+          <Route path='/checkout'
+            element={
+              <LoginValidation>
+                <Checkout />
+              </LoginValidation>
+            }
+          />
+
+          <Route path='/admin'
+            element={
+              <AdminValidation>
+                <Admin />
+              </AdminValidation>
+            }
+          />
+
+          <Route path='/*'
+            element={
+              <NotFound />
+            }
+          />
+        </Routes>
+
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <Footer />
     </>
   )
 }

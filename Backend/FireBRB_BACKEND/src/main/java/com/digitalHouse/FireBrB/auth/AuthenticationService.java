@@ -4,11 +4,17 @@ import com.digitalHouse.FireBrB.configuration.JwtService;
 import com.digitalHouse.FireBrB.enums.Role;
 import com.digitalHouse.FireBrB.model.User;
 import com.digitalHouse.FireBrB.repository.IUserRepository;
+import com.digitalHouse.FireBrB.request.AssignAdminRequest;
+import com.digitalHouse.FireBrB.request.AuthenticationRequest;
+import com.digitalHouse.FireBrB.request.RefreshTokenRequest;
+import com.digitalHouse.FireBrB.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +37,13 @@ public class AuthenticationService {
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .role(user.getRole())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .surname(user.getSurname())
+                .build();
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -43,7 +55,13 @@ public class AuthenticationService {
                 .orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .role(user.getRole())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .surname(user.getSurname())
+                .build();
     }
 
     public User assignAdmin(AssignAdminRequest request) {
@@ -58,5 +76,21 @@ public class AuthenticationService {
                 .orElseThrow();
         user.setRole(Role.USERREGULAR);
         return userRepository.save(user);
+    }
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest request) {
+        Optional<User> userOptional = userRepository.findByEmail(request.getUserEmail());
+        if (jwtService.isTokenExpired(request.getToken()) && userOptional.isPresent()) {
+            User user = userOptional.get();
+            var jwtToken = jwtService.generateToken(user);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .role(user.getRole())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstName())
+                    .surname(user.getSurname())
+                    .build();
+        }
+        else return new AuthenticationResponse();
     }
 }

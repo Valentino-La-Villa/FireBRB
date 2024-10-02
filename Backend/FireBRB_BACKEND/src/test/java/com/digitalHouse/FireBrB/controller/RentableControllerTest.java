@@ -39,7 +39,6 @@ class RentableControllerTest {
 
     private static final String ENDPOINT = "/rentables";
     private static final String ADDRESS = "Montevideo 1423";
-    private static final String POSTAL_CODE = "SK1003";
     private static final Double PRICE_PER_NIGHT = 12.41;
     private static final Double PRICE_PER_NIGHT_UPDATE = 21.30;
 
@@ -50,7 +49,7 @@ class RentableControllerTest {
     private static final String IMGSJSON = "[\"" + IMAGE_1 + "\", \"" + IMAGE_2 + "\"]";
 
     public RentableDTO dataLoad() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
 
@@ -58,11 +57,16 @@ class RentableControllerTest {
         associatedImgs.add(IMAGE_1);
         associatedImgs.add(IMAGE_2);
 
-        RentableDTO input = new RentableDTO(ADDRESS,
-                POSTAL_CODE,
+        RentableDTO input = new RentableDTO("Rentable Name",
+                ADDRESS,
+                "Santa Fe",
+                "Santa Fe",
+                "Argentina",
                 PRICE_PER_NIGHT,
+                2.7,
                 rentableTypeResponse.getId(),
-                associatedImgs
+                associatedImgs,
+                ""
                 );
         RentableDTO response = rentableService.save(input);
 
@@ -79,7 +83,6 @@ class RentableControllerTest {
         mockMvc.perform(get(ENDPOINT + "/" + id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.address").value(ADDRESS))
-                .andExpect(jsonPath("$.postalCode").value(POSTAL_CODE))
                 .andExpect(jsonPath("$.pricePerNightUSD").value(PRICE_PER_NIGHT))
                 .andExpect(jsonPath("$.rentableTypeId").value(rentableTypeAssociatedId))
                 .andExpect(jsonPath("$.associatedImgsUrl").isNotEmpty());
@@ -93,7 +96,6 @@ class RentableControllerTest {
 
         String rentablePersisted = "{" +
                 "\"address\": \""+ADDRESS+"\"," +
-                "\"postalCode\": \""+POSTAL_CODE+"\"," +
                 "\"pricePerNightUSD\": \""+PRICE_PER_NIGHT+"\"," +
                 "\"rentableTypeId\": \""+rentableTypeAssociatedId+"\"," +
                 "\"associatedImgsUrl\":" + IMGSJSON +
@@ -105,7 +107,6 @@ class RentableControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.address").value(ADDRESS))
-                .andExpect(jsonPath("$.postalCode").value(POSTAL_CODE))
                 .andExpect(jsonPath("$.pricePerNightUSD").value(PRICE_PER_NIGHT))
                 .andExpect(jsonPath("$.rentableTypeId").value(rentableTypeAssociatedId))
                 .andExpect(jsonPath("$.associatedImgsUrl").isNotEmpty());
@@ -121,6 +122,15 @@ class RentableControllerTest {
     }
 
     @Test
+    @Order(6) void filterSearch() throws Exception {
+
+        mockMvc.perform(get(ENDPOINT + "/search?limit=4")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists());
+    }
+
+    @Test
     @Order(4)
     public void updateRequest() throws Exception {
         RentableDTO rentableDTOLoaded = dataLoad();
@@ -130,7 +140,6 @@ class RentableControllerTest {
         String newRentable = "{" +
                 "\"id\": \""+id+"\"," +
                 "\"address\": \""+ADDRESS+" - edited\"," +
-                "\"postalCode\": \""+POSTAL_CODE+" - edited\"," +
                 "\"pricePerNightUSD\": \""+PRICE_PER_NIGHT_UPDATE+"\"," +
                 "\"rentableTypeId\": \""+rentableTypeAssociatedId+"\"," +
                 "\"associatedImgsUrl\":" + IMGSJSON +
@@ -142,7 +151,6 @@ class RentableControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.address").value(ADDRESS + " - edited"))
-                .andExpect(jsonPath("$.postalCode").value(POSTAL_CODE + " - edited"))
                 .andExpect(jsonPath("$.pricePerNightUSD").value(PRICE_PER_NIGHT_UPDATE))
                 .andExpect(jsonPath("$.rentableTypeId").value(rentableTypeAssociatedId))
                 .andExpect(jsonPath("$.associatedImgsUrl").isNotEmpty());

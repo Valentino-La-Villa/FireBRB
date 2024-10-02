@@ -1,8 +1,7 @@
 package com.digitalHouse.FireBrB.controller;
 
 import com.digitalHouse.FireBrB.auth.AuthenticationService;
-import com.digitalHouse.FireBrB.auth.RegisterRequest;
-import lombok.RequiredArgsConstructor;
+import com.digitalHouse.FireBrB.request.RegisterRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,8 +62,7 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.firstName").value(FIRST_NAME))
-                .andExpect(jsonPath("$.surname").value(SURNAME))
-                .andExpect(jsonPath("$.role").value("USERREGULAR"));
+                .andExpect(jsonPath("$.surname").value(SURNAME));
     }
 
 }

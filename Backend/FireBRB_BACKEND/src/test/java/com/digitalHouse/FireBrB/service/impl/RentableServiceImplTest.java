@@ -3,6 +3,7 @@ package com.digitalHouse.FireBrB.service.impl;
 import com.digitalHouse.FireBrB.dto.RentableDTO;
 import com.digitalHouse.FireBrB.dto.RentableTypeDTO;
 import com.digitalHouse.FireBrB.exception.ResourceNotFoundException;
+import com.digitalHouse.FireBrB.request.FilterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +27,7 @@ class RentableServiceImplTest {
     private static final String IMAGE_4 = "https://images.unsplash.com/photo-1529290130-4ca3753253ae?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
     public Long loadData() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
         List<String> associatedImgs = new ArrayList<>();
@@ -34,11 +35,15 @@ class RentableServiceImplTest {
         associatedImgs.add(IMAGE_2);
 
 
-        RentableDTO input = new RentableDTO("Montevideo 1423",
-                "SK1003",
-                12.41,
-                rentableTypeResponse.getId(),
-                associatedImgs);
+        RentableDTO input = new RentableDTO();
+        input.setAddress("Montevideo 1423");
+        input.setCity("Rosario");
+        input.setRegion("Santa Fe");
+        input.setCountry("Argentina");
+        input.setPricePerNightUSD(12.41);
+        input.setStarRating(0.5);
+        input.setRentableTypeId(rentableTypeResponse.getId());
+        input.setAssociatedImgsUrl(associatedImgs);
         RentableDTO response = rentableService.save(input);
 
         return response.getId();
@@ -46,18 +51,22 @@ class RentableServiceImplTest {
 
     @Test
     public void save() throws ResourceNotFoundException {
-        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment");
+        RentableTypeDTO rentableTypeDTO = new RentableTypeDTO("Appartment", "");
         RentableTypeDTO rentableTypeResponse = typeService.save(rentableTypeDTO);
 
         List<String> associatedImgs = new ArrayList<>();
         associatedImgs.add(IMAGE_1);
         associatedImgs.add(IMAGE_2);
 
-        RentableDTO input = new RentableDTO("Urquiza 2368",
-                "JS9531",
-                9.36,
-                rentableTypeResponse.getId(),
-                associatedImgs);
+        RentableDTO input = new RentableDTO();
+        input.setAddress("Montevideo 1423");
+        input.setCity("Rosario");
+        input.setRegion("Santa Fe");
+        input.setCountry("Argentina");
+        input.setPricePerNightUSD(12.41);
+        input.setStarRating(0.5);
+        input.setRentableTypeId(rentableTypeResponse.getId());
+        input.setAssociatedImgsUrl(associatedImgs);
         RentableDTO response = rentableService.save(input);
 
         Optional<RentableDTO> actualRentable = rentableService.findById(response.getId());
@@ -82,6 +91,13 @@ class RentableServiceImplTest {
     }
 
     @Test
+    public void filterSearch() throws ResourceNotFoundException {
+        loadData();
+        List<RentableDTO> response = rentableService.filterSearch(new FilterRequest(3, true));
+        assertEquals(response.size(), 3);
+    }
+
+    @Test
     public void update() throws ResourceNotFoundException {
         Long id = loadData();
 
@@ -90,7 +106,7 @@ class RentableServiceImplTest {
         associatedImgs.add(IMAGE_3);
         associatedImgs.add(IMAGE_4);
 
-        RentableDTO input = new RentableDTO(id, "Crespo 2547", "KG3284", 10.91, 1L, associatedImgs);
+        RentableDTO input = new RentableDTO(id, "Residencia Márquez", "Crespo 2547", "Rosario", "Santa Fe", "Argentina", 10.91, 3.5, 1L, associatedImgs, "");
         RentableDTO response = rentableService.update(input);
 
         assertThat(input)

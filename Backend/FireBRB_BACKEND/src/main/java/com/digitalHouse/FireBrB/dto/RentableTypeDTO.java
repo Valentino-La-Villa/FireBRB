@@ -7,14 +7,17 @@ import java.util.Set;
 public class RentableTypeDTO {
     private Long id;
     private String name;
+    private String associatedImg;
 
-    public RentableTypeDTO(Long id, String name) {
+    public RentableTypeDTO(Long id, String name, String associatedImg) {
         this.id = id;
         this.name = name;
+        this.associatedImg = associatedImg;
     }
 
-    public RentableTypeDTO(String name) {
+    public RentableTypeDTO(String name, String associatedImg) {
         this.name = name;
+        this.associatedImg = associatedImg;
     }
 
     public RentableTypeDTO() {
@@ -42,5 +45,13 @@ public class RentableTypeDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAssociatedImg() {
+        return associatedImg;
+    }
+
+    public void setAssociatedImg(String associatedImg) {
+        this.associatedImg = associatedImg;
     }
 }
